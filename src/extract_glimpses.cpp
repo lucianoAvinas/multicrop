@@ -89,16 +89,16 @@ at::Tensor crop2d_cpu(
   if (X.dim() == 2) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(2);
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width, channels}, X.options());
   }
 
 
@@ -147,16 +147,16 @@ at::Tensor crop2d(
   if (X.dim() == 2) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(2);
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width, channels}, X.options());
   }
 
 
@@ -289,16 +289,16 @@ at::Tensor crop3d_cpu(
   if (X.dim() == 3) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_length, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(3);
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width, channels}, X.options());
   }
 
   if (first) {
@@ -349,16 +349,16 @@ at::Tensor crop3d(
   if (X.dim() == 3) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_length, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(3);
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width, channels}, X.options());
   }
 
   if (first) {

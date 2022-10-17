@@ -3,10 +3,19 @@
 #include "ATen/ATen.h"
 
 // for cuda::type<scalar_t>;
-#include "ATen/cuda/CUDATypeConversion.cuh"
+// #include "ATen/cuda/CUDATypeConversion.cuh"
 // line 107, 303, 316 for lambda syntax
 
 #include "utils.h"
+
+template <typename T>
+struct TypeConversion {
+  using type = T;
+};
+
+template <typename T>
+using type = typename TypeConversion<T>::type;
+
 
 template <typename T>
 __global__ void Crop2DFKernel(
@@ -91,16 +100,16 @@ at::Tensor crop2d_gpu(
   if (X.dim() == 2) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(2);
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width, channels}, X.options());
   }
 
   const int output_size = output.numel();
@@ -109,7 +118,7 @@ at::Tensor crop2d_gpu(
 
   if (first) {
     AT_DISPATCH_ALL_TYPES(X.type(), "crop2d_cuda", [&] {
-        using cuda_scalar_t = at::cuda::type<scalar_t>;
+        using cuda_scalar_t = type<scalar_t>;
         Crop2DFKernel<cuda_scalar_t>
           <<<blocks, threads>>>(
               output_size,
@@ -125,7 +134,7 @@ at::Tensor crop2d_gpu(
           });
   } else {
     AT_DISPATCH_ALL_TYPES(X.type(), "crop2d_cuda", [&] {
-        using cuda_scalar_t = at::cuda::type<scalar_t>;
+        using cuda_scalar_t = type<scalar_t>;
         Crop2DLKernel<cuda_scalar_t>
           <<<blocks, threads>>>(
               output_size,
@@ -241,16 +250,16 @@ at::Tensor crop3d_gpu(
   if (X.dim() == 3) {
     channels = 1;
     off = 1;
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width}, X.options());
   } else if (first) {
     channels = X.size(0);
-    output = X.type().zeros(
-        {R.size(0), channels, pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), channels, pooled_length, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(3);
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width, channels}, X.options());
   }
 
   const int output_size = output.numel();
@@ -259,7 +268,7 @@ at::Tensor crop3d_gpu(
 
   if (first) {
     AT_DISPATCH_ALL_TYPES(X.type(), "crop3d_cuda", [&] {
-        using cuda_scalar_t = at::cuda::type<scalar_t>;
+        using cuda_scalar_t = type<scalar_t>;
         Crop3DFKernel<cuda_scalar_t>
           <<<blocks, threads>>>(
               output_size,
@@ -277,7 +286,7 @@ at::Tensor crop3d_gpu(
           });
   } else {
     AT_DISPATCH_ALL_TYPES(X.type(), "crop3d_cuda", [&] {
-        using cuda_scalar_t = at::cuda::type<scalar_t>;
+        using cuda_scalar_t = type<scalar_t>;
         Crop3DLKernel<cuda_scalar_t>
           <<<blocks, threads>>>(
               output_size,

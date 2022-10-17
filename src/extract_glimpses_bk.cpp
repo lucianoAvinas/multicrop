@@ -47,12 +47,12 @@ at::Tensor crop2d(
   int channels = 1;
 
   if (X.dim() == 2) {
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(2);
-    output = X.type().zeros(
-        {R.size(0), pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_height, pooled_width, channels}, X.options());
   }
 
 
@@ -125,12 +125,12 @@ at::Tensor crop3d(
   at::Tensor output;
   int channels = 1;
   if (X.dim() == 3) {
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width}, X.options());
   } else {
     channels = X.size(3);
-    output = X.type().zeros(
-        {R.size(0), pooled_length, pooled_height, pooled_width, channels});
+    output = at::zeros(
+        {R.size(0), pooled_length, pooled_height, pooled_width, channels}, X.options());
   }
 
 
